@@ -1,191 +1,181 @@
-10.1. Operating System Interface
-
-The os module provides dozens of functions for interacting with the operating system:
-
->>> import os
->>> os.getcwd()      # Return the current working directory
-'C:\\Python26'
->>> os.chdir('/server/accesslogs')   # Change current working directory
->>> os.system('mkdir today')   # Run the command mkdir in the system shell
-0
-
-Be sure to use the import os style instead of from os import *. This will keep os.open() from shadowing the built-in open() function which operates much differently.
-
-The built-in dir() and help() functions are useful as interactive aids for working with large modules like os:
-
->>> import os
->>> dir(os)
-<returns a list of all module functions>
->>> help(os)
-<returns an extensive manual page created from the module's docstrings>
-
-For daily file and directory management tasks, the shutil module provides a higher level interface that is easier to use:
-
->>> import shutil
->>> shutil.copyfile('data.db', 'archive.db')
->>> shutil.move('/build/executables', 'installdir')
-
-10.2. File Wildcards
-
-The glob module provides a function for making file lists from directory wildcard searches:
-
->>> import glob
->>> glob.glob('*.py')
-['primes.py', 'random.py', 'quote.py']
-
-10.3. Command Line Arguments
-
-Common utility scripts often need to process command line arguments. These arguments are stored in the sys module’s argv attribute as a list. For instance the following output results from running python demo.py one two three at the command line:
-
->>> import sys
->>> print sys.argv
-['demo.py', 'one', 'two', 'three']
-
-The getopt module processes sys.argv using the conventions of the Unix getopt() function. More powerful and flexible command line processing is provided by the argparse module.
-10.4. Error Output Redirection and Program Termination
-
-The sys module also has attributes for stdin, stdout, and stderr. The latter is useful for emitting warnings and error messages to make them visible even when stdout has been redirected:
-
->>> sys.stderr.write('Warning, log file not found starting a new one\n')
-Warning, log file not found starting a new one
-
-The most direct way to terminate a script is to use sys.exit().
-10.5. String Pattern Matching
-
-The re module provides regular expression tools for advanced string processing. For complex matching and manipulation, regular expressions offer succinct, optimized solutions:
-
->>> import re
->>> re.findall(r'\bf[a-z]*', 'which foot or hand fell fastest')
-['foot', 'fell', 'fastest']
->>> re.sub(r'(\b[a-z]+) \1', r'\1', 'cat in the the hat')
-'cat in the hat'
-
-When only simple capabilities are needed, string methods are preferred because they are easier to read and debug:
-
->>> 'tea for too'.replace('too', 'two')
-'tea for two'
-
-10.6. Mathematics
-
-The math module gives access to the underlying C library functions for floating point math:
-
->>> import math
->>> math.cos(math.pi / 4.0)
-0.70710678118654757
->>> math.log(1024, 2)
-10.0
-
-The random module provides tools for making random selections:
-
->>> import random
->>> random.choice(['apple', 'pear', 'banana'])
-'apple'
->>> random.sample(xrange(100), 10)   # sampling without replacement
-[30, 83, 16, 4, 8, 81, 41, 50, 18, 33]
->>> random.random()    # random float
-0.17970987693706186
->>> random.randrange(6)    # random integer chosen from range(6)
-4
-
-10.7. Internet Access
-
-There are a number of modules for accessing the internet and processing internet protocols. Two of the simplest are urllib2 for retrieving data from URLs and smtplib for sending mail:
-
->>> import urllib2
->>> for line in urllib2.urlopen('http://tycho.usno.navy.mil/cgi-bin/timer.pl'):
-...     if 'EST' in line or 'EDT' in line:  # look for Eastern Time
-...         print line
-
-<BR>Nov. 25, 09:43:32 PM EST
-
->>> import smtplib
->>> server = smtplib.SMTP('localhost')
->>> server.sendmail('soothsayer@example.org', 'jcaesar@example.org',
-... """To: jcaesar@example.org
-... From: soothsayer@example.org
-...
-... Beware the Ides of March.
-... """)
->>> server.quit()
-
-(Note that the second example needs a mailserver running on localhost.)
-10.8. Dates and Times
-
-The datetime module supplies classes for manipulating dates and times in both simple and complex ways. While date and time arithmetic is supported, the focus of the implementation is on efficient member extraction for output formatting and manipulation. The module also supports objects that are timezone aware.
-
->>> # dates are easily constructed and formatted
->>> from datetime import date
->>> now = date.today()
->>> now
-datetime.date(2003, 12, 2)
->>> now.strftime("%m-%d-%y. %d %b %Y is a %A on the %d day of %B.")
-'12-02-03. 02 Dec 2003 is a Tuesday on the 02 day of December.'
-
->>> # dates support calendar arithmetic
->>> birthday = date(1964, 7, 31)
->>> age = now - birthday
->>> age.days
-14368
-
-10.9. Data Compression
-
-Common data archiving and compression formats are directly supported by modules including: zlib, gzip, bz2, zipfile and tarfile.
-
->>> import zlib
->>> s = 'witch which has which witches wrist watch'
->>> len(s)
-41
->>> t = zlib.compress(s)
->>> len(t)
-37
->>> zlib.decompress(t)
-'witch which has which witches wrist watch'
->>> zlib.crc32(s)
-226805979
-
-10.10. Performance Measurement
-
-Some Python users develop a deep interest in knowing the relative performance of different approaches to the same problem. Python provides a measurement tool that answers those questions immediately.
-
-For example, it may be tempting to use the tuple packing and unpacking feature instead of the traditional approach to swapping arguments. The timeit module quickly demonstrates a modest performance advantage:
-
->>> from timeit import Timer
->>> Timer('t=a; a=b; b=t', 'a=1; b=2').timeit()
-0.57535828626024577
->>> Timer('a,b = b,a', 'a=1; b=2').timeit()
-0.54962537085770791
-
-In contrast to timeit‘s fine level of granularity, the profile and pstats modules provide tools for identifying time critical sections in larger blocks of code.
-10.11. Quality Control
-
-One approach for developing high quality software is to write tests for each function as it is developed and to run those tests frequently during the development process.
-
-The doctest module provides a tool for scanning a module and validating tests embedded in a program’s docstrings. Test construction is as simple as cutting-and-pasting a typical call along with its results into the docstring. This improves the documentation by providing the user with an example and it allows the doctest module to make sure the code remains true to the documentation:
-
-def average(values):
-	    """Computes the arithmetic mean of a list of numbers.
-
-	        >>> print average([20, 30, 70])
-		    40.0
-		        """
-			    return sum(values, 0.0) / len(values)
-
-			    import doctest
-			    doctest.testmod()   # automatically validate the embedded tests
-
-			    The unittest module is not as effortless as the doctest module, but it allows a more comprehensive set of tests to be maintained in a separate file:
-
-			    import unittest
-
-			    class TestStatisticalFunctions(unittest.TestCase):
-
-				        def test_average(self):
-						        self.assertEqual(average([20, 30, 70]), 40.0)
-							        self.assertEqual(round(average([1, 5, 7]), 1), 4.3)
-								        with self.assertRaises(ZeroDivisionError):
-									            average([])
-										            with self.assertRaises(TypeError):
-											                average(20, 30, 70)
-
-													unittest.main() # Calling from the command line invokes all tests
+Y Suresh Kumar	INDIA	ANDHRA PRADESH	MO216524619	500	Feb 12 2016 6:55PM
+G Madhu Sekhar	INDIA	ANDHRA PRADESH	MO216523890	100	Feb 12 2016 6:46PM
+Mohd. Javed	INDIA	PUNJAB	MO216523674	40	Feb 12 2016 5:40PM
+Ashok Sood	INDIA	PUNJAB	MO216523672	100	Feb 12 2016 5:21PM
+Haris K	INDIA	KERALA	MO216523670	100	Feb 12 2016 4:38PM
+Debabrata Dutta	INDIA	JHARKHAND	NI523668	101	Feb 12 2016 4:33PM
+MK Sulaiman	INDIA	KERALA	MO216523669	1000	Feb 12 2016 4:33PM
+POONAM LAMBHATE	INDIA	MAHARASHTRA	NI523664	50	Feb 12 2016 4:25PM
+Haneefa KV	INDIA	KERALA	MO216523667	100	Feb 12 2016 4:23PM
+Sanad M	INDIA	KERALA	MO216523666	10	Feb 12 2016 4:20PM
+Dhanesh N	INDIA	KERALA	MO216523665	200	Feb 12 2016 4:20PM
+riyas v	INDIA	KERALA	MO216523663	100	Feb 12 2016 4:17PM
+Beebu T	INDIA	KERALA	MO216523661	100	Feb 12 2016 4:14PM
+Jayaraj PM	INDIA	KERALA	MO216523660	10	Feb 12 2016 4:13PM
+M Indira	INDIA	KERALA	MO216523659	10	Feb 12 2016 4:12PM
+C Suresh Kumar	INDIA	KERALA	MO216523658	10	Feb 12 2016 4:11PM
+haneefa k v	INDIA	KERALA	MO216523657	100	Feb 12 2016 4:10PM
+sulaiman m k	INDIA	KERALA	MO216523655	100	Feb 12 2016 4:07PM
+Dasan K	INDIA	KERALA	MO216523654	100	Feb 12 2016 4:06PM
+Janardhanan S	INDIA	KERALA	MO216523653	100	Feb 12 2016 4:03PM
+raveendran k	INDIA	KERALA	MO216523652	50	Feb 12 2016 4:02PM
+sujith kumar	INDIA	KERALA	MO216523651	100	Feb 12 2016 3:57PM
+Muthali Vattaparambil	INDIA	KERALA	MO216523650	100	Feb 12 2016 3:54PM
+AP George	INDIA	KERALA	MO216523649	100	Feb 12 2016 3:51PM
+muhamad p	INDIA	KERALA	MO216523648	100	Feb 12 2016 3:50PM
+Sanad M	INDIA	KERALA	MO216523647	50	Feb 12 2016 3:48PM
+sheareef t k	INDIA	KERALA	MO216523646	50	Feb 12 2016 3:48PM
+Kaja Hussain A	INDIA	KERALA	MO216523645	1	Feb 12 2016 3:46PM
+George Thomas	INDIA	KERALA	MO216523644	50	Feb 12 2016 3:44PM
+Ummer I P	INDIA	KERALA	MO216523643	100	Feb 12 2016 3:42PM
+Kaja Hussain A	INDIA	KERALA	MO216523642	50	Feb 12 2016 3:41PM
+M. Mohandas	INDIA	KERALA	MO216523640	100	Feb 12 2016 3:38PM
+George TM	INDIA	KERALA	MO216523639	50	Feb 12 2016 3:38PM
+V C Chinnan	INDIA	KERALA	MO216523634	100	Feb 12 2016 3:35PM
+shameer ok	INDIA	KERALA	MO216523630	100	Feb 12 2016 3:32PM
+amarjeet singh	INDIA	PUNJAB	MO216523629	100	Feb 12 2016 3:31PM
+manpreet kumar	INDIA	PUNJAB	MO216523626	100	Feb 12 2016 3:29PM
+Mitarth Shende	INDIA	MAHARASHTRA	NE523621	100	Feb 12 2016 3:25PM
+Divakaran K	INDIA	KERALA	MO216523620	100	Feb 12 2016 3:09PM
+Abdul Asis	INDIA	KERALA	MO216523619	10	Feb 12 2016 3:05PM
+Moni sk	INDIA	WEST BENGAL	MO216523618	10	Feb 12 2016 2:41PM
+Noushad Vallapuzha	INDIA	KERALA	MO216523617	100	Feb 12 2016 2:36PM
+Vijaya Raghavan	INDIA	KERALA	MO216523616	500	Feb 12 2016 2:17PM
+amrit kaur	INDIA	PUNJAB	MO216523615	90	Feb 12 2016 2:16PM
+Muhamed Rafik	INDIA	KERALA	MO216523613	100	Feb 12 2016 2:13PM
+mukesh	INDIA	PUNJAB	MO216523612	30	Feb 12 2016 1:47PM
+Abdul asis	INDIA	KERALA	MO216523611	100	Feb 12 2016 1:43PM
+sukhwinder singh	INDIA	PUNJAB	MO216523610	50	Feb 12 2016 1:41PM
+rampal	INDIA	PUNJAB	MO216523607	100	Feb 12 2016 1:34PM
+SURJIT SINGH	INDIA	PUNJAB	MO216523606	1000	Feb 12 2016 1:29PM
+charanjit	INDIA	PUNJAB	MO216523605	500	Feb 12 2016 1:25PM
+Saibur	INDIA	WEST BENGAL	MO216523604	10	Feb 12 2016 12:49PM
+Surendran M	INDIA	KERALA	MO216523602	100	Feb 12 2016 12:20PM
+Padmanabhan B	INDIA	KERALA	MO216523601	100	Feb 12 2016 12:16PM
+PK Balan	INDIA	KERALA	MO216523600	100	Feb 12 2016 12:15PM
+Mannayath Abdu RahiMan	INDIA	KERALA	MO216523599	100	Feb 12 2016 12:14PM
+jaskaran singh	INDIA	PUNJAB	MO216523598	200	Feb 12 2016 12:12PM
+Padmanabhan B	INDIA	KERALA	MO216523597	500	Feb 12 2016 12:09PM
+jatinder singh	INDIA	PUNJAB	MO216523596	200	Feb 12 2016 12:04PM
+manjit singh	INDIA	PUNJAB	MO216523594	600	Feb 12 2016 12:02PM
+rajeshkumar. c	INDIA	KERALA	MO216523592	50	Feb 12 2016 11:08AM
+surinder pal singh	INDIA	PUNJAB	MO216523591	1000	Feb 12 2016 10:57AM
+ravikainadath	INDIA	KERALA	NI523584	200	Feb 12 2016 10:48AM
+Mridula Ganguly Khanna	INDIA	HARYANA	NI523587	3000	Feb 12 2016 10:41AM
+PAWAN SAXENA	INDIA	UTTAR PRADESH	NE523586	1000	Feb 12 2016 10:34AM
+naib singh	INDIA	PUNJAB	MO216523583	3300	Feb 12 2016 10:01AM
+Parvinder Singh	CANADA	 	NE523574	50000	Feb 12 2016 5:23AM
+Kamat Jain	INDIA	PUNJAB	MO216523564	20	Feb 11 2016 9:44PM
+Charan S	INDIA	PUNJAB	MO216523563	20	Feb 11 2016 9:39PM
+Vijay Kumar	INDIA	PUNJAB	MO216523562	50	Feb 11 2016 9:34PM
+Dharmpal Singh	INDIA	PUNJAB	MO216523561	20	Feb 11 2016 9:29PM
+Gurnam Singh	INDIA	PUNJAB	MO216523560	30	Feb 11 2016 9:26PM
+Gurdeep Singh	INDIA	PUNJAB	MO216523559	50	Feb 11 2016 9:21PM
+Balbir Singh	INDIA	PUNJAB	MO216523558	20	Feb 11 2016 9:14PM
+hardev singh	INDIA	PUNJAB	MO216523557	3000	Feb 11 2016 9:10PM
+hardev singh	INDIA	PUNJAB	MO216523556	15000	Feb 11 2016 9:08PM
+sHivraj maan	INDIA	HARYANA	MO216523555	100	Feb 11 2016 8:34PM
+Bakul	INDIA	WEST BENGAL	MO216523554	10	Feb 11 2016 6:44PM
+Sukhvinder singh ji	INDIA	PUNJAB	MO216523553	1100	Feb 11 2016 6:28PM
+Swapnil Pable	INDIA	MAHARASHTRA	NE523552	1500	Feb 11 2016 4:50PM
+Bharpoor Singh	INDIA	PUNJAB	MO216523550	20	Feb 11 2016 4:39PM
+Jagtar Singh	INDIA	PUNJAB	MO216523548	50	Feb 11 2016 4:20PM
+KP John	INDIA	KERALA	MO216523547	1200	Feb 11 2016 4:19PM
+Karnail Singh	INDIA	PUNJAB	MO216523546	20	Feb 11 2016 4:15PM
+Prajith PK	INDIA	KERALA	MO216523545	600	Feb 11 2016 4:14PM
+Marsvor Ali	INDIA	PUNJAB	MO216523544	30	Feb 11 2016 4:12PM
+Sulthan Kabeer	INDIA	KERALA	MO216523543	100	Feb 11 2016 4:10PM
+Illias A	INDIA	KERALA	MO216523542	10	Feb 11 2016 4:06PM
+kunal giri	INDIA	UTTARAKHAND	MO216523540	10	Feb 11 2016 4:02PM
+Jose Prasad	INDIA	KERALA	MO216523539	250	Feb 11 2016 4:00PM
+Dharmpal S	INDIA	PUNJAB	MO216523538	20	Feb 11 2016 4:00PM
+Joseph Isaac	INDIA	KERALA	MO216523537	100	Feb 11 2016 3:56PM
+Harbans S	INDIA	PUNJAB	MO216523536	20	Feb 11 2016 3:55PM
+Abbas K	INDIA	KERALA	MO216523535	1200	Feb 11 2016 3:54PM
+pankaj arya	INDIA	UTTARAKHAND	MO216523534	100	Feb 11 2016 3:53PM
+Deepak J	INDIA	KERALA	MO216523533	100	Feb 11 2016 3:48PM
+laxman singh	INDIA	UTTARAKHAND	MO216523532	100	Feb 11 2016 3:45PM
+Vinod Kumar HG	INDIA	KERALA	MO216523531	200	Feb 11 2016 3:43PM
+Gurdev singh	INDIA	PUNJAB	MO216523530	100	Feb 11 2016 3:41PM
+MK Moosakutty	INDIA	KERALA	MO216523529	100	Feb 11 2016 3:39PM
+Assanar A	INDIA	KERALA	MO216523528	100	Feb 11 2016 3:36PM
+M.P Paul	INDIA	KERALA	MO216523527	100	Feb 11 2016 3:32PM
+Shaj P	INDIA	KERALA	MO216523526	100	Feb 11 2016 3:29PM
+KP Mohomod Kunhi	INDIA	KERALA	MO216523525	1000	Feb 11 2016 3:24PM
+Ravinder Bhardwaj	INDIA	PUNJAB	NI523517	500	Feb 11 2016 1:15PM
+rakesh	INDIA	PUNJAB	MO216523516	300	Feb 11 2016 12:58PM
+Gaurav Rupani	INDIA	UTTAR PRADESH	NI523515	100	Feb 11 2016 12:50PM
+Ann Cheeran	INDIA	KERALA	MO216523514	250	Feb 11 2016 12:33PM
+surinder	INDIA	PUNJAB	MO216523513	100	Feb 11 2016 12:28PM
+N.D.Sarkar	INDIA	WEST BENGAL	MO216523512	10	Feb 11 2016 12:21PM
+Rajwant Singh Dhillon	INDIA	PUNJAB	MO216523511	100	Feb 11 2016 12:11PM
+Gurpal Dhillon	CANADA	 	NE523510	50000	Feb 11 2016 12:09PM
+Manpreet Singh	INDIA	PUNJAB	NI523507	11	Feb 11 2016 11:40AM
+Rajan Singh	INDIA	HARYANA	NI523505	501	Feb 11 2016 11:03AM
+balkaran singh	INDIA	PUNJAB	MO216523504	500	Feb 11 2016 9:56AM
+Sandeep Singh Grewal	INDIA	PUNJAB	NI523503	7700	Feb 11 2016 9:16AM
+Harvinder Singh	INDIA	PUNJAB	MO216523499	1	Feb 10 2016 8:45PM
+Manjit Kaur Sodia	INDIA	PUNJAB	MO216523498	1	Feb 10 2016 8:40PM
+Mahesh Kumar	INDIA	PUNJAB	MO216523497	1	Feb 10 2016 8:35PM
+Javed Khan	INDIA	PUNJAB	MO216523495	1	Feb 10 2016 8:31PM
+Ravi Verma	INDIA	PUNJAB	MO216523493	1	Feb 10 2016 8:29PM
+Deepak Gupta	INDIA	DELHI	NE523491	1001	Feb 10 2016 8:29PM
+Narinder Singh	INDIA	PUNJAB	MO216523492	1	Feb 10 2016 8:27PM
+DPS Grewal	INDIA	PUNJAB	MO216523489	1	Feb 10 2016 8:25PM
+Davinder Singh	INDIA	PUNJAB	MO216523486	1	Feb 10 2016 8:19PM
+Satwinder Birdi	INDIA	PUNJAB	MO216523485	1	Feb 10 2016 8:14PM
+Ranjit Kumar	INDIA	PUNJAB	MO216523484	1	Feb 10 2016 8:11PM
+Dasarathi GV	INDIA	KARNATAKA	NI523483	5000	Feb 10 2016 7:21PM
+Tojo Jose	INDIA	KERALA	MO216523467	101	Feb 10 2016 6:27PM
+bhupinder singh	INDIA	PUNJAB	MO216523465	100	Feb 10 2016 6:18PM
+gurpreet singh	INDIA	PUNJAB	MO216523464	100	Feb 10 2016 6:12PM
+gurpreet singh	INDIA	PUNJAB	MO216523463	100	Feb 10 2016 6:10PM
+balwinder singh	INDIA	PUNJAB	MO216523460	100	Feb 10 2016 6:06PM
+harjeet singh	INDIA	PUNJAB	MO216523446	100	Feb 10 2016 5:13PM
+ishatpreet singh	INDIA	PUNJAB	MO216523437	102	Feb 10 2016 4:23PM
+nishad vd	INDIA	KERALA	MO216523433	10	Feb 10 2016 4:10PM
+suumen adhikari	INDIA	WEST BENGAL	MO216523430	20	Feb 10 2016 3:48PM
+Prasenjeet Pati	INDIA	ODISHA	MO216523429	1	Feb 10 2016 3:04PM
+Randhir singh	INDIA	PUNJAB	MO216523428	50	Feb 10 2016 2:58PM
+Makhan zingh	INDIA	PUNJAB	MO216523427	50	Feb 10 2016 2:56PM
+Bhpwinder singh	INDIA	PUNJAB	MO216523426	200	Feb 10 2016 2:39PM
+Gurwinder singh	INDIA	PUNJAB	MO216523425	100	Feb 10 2016 2:38PM
+Bahadur singh	INDIA	PUNJAB	MO216523424	100	Feb 10 2016 2:36PM
+Surinder pal singh	INDIA	PUNJAB	MO216523423	100	Feb 10 2016 2:34PM
+Aulie Bannerjee	INDIA	WEST BENGAL	MO216523422	20	Feb 10 2016 2:33PM
+Mihan singh	INDIA	PUNJAB	MO216523421	100	Feb 10 2016 2:32PM
+Hardip singh	INDIA	PUNJAB	MO216523420	100	Feb 10 2016 2:31PM
+Balwinder singh	INDIA	PUNJAB	MO216523419	100	Feb 10 2016 2:28PM
+Jagraj singh	INDIA	PUNJAB	MO216523418	100	Feb 10 2016 2:26PM
+Sukhdev singh	INDIA	PUNJAB	MO216523417	39	Feb 10 2016 2:23PM
+Maninder singh	INDIA	PUNJAB	MO216523416	30	Feb 10 2016 2:22PM
+JOBIN SAMUEL JOY	INDIA	KERALA	NI523414	100	Feb 10 2016 2:20PM
+Maninder singh	INDIA	PUNJAB	MO216523415	40	Feb 10 2016 2:18PM
+Sukhwindet singh	INDIA	PUNJAB	MO216523413	25	Feb 10 2016 2:16PM
+Jeet singh	INDIA	PUNJAB	MO216523412	25	Feb 10 2016 2:15PM
+Pargat singh	INDIA	PUNJAB	MO216523411	25	Feb 10 2016 2:13PM
+Joginder singh	INDIA	PUNJAB	MO216523410	50	Feb 10 2016 2:11PM
+Dharampal singh	INDIA	PUNJAB	MO216523409	100	Feb 10 2016 2:10PM
+Surjit singh	INDIA	PUNJAB	MO216523408	100	Feb 10 2016 2:08PM
+Darshan singh	INDIA	PUNJAB	MO216523407	10	Feb 10 2016 2:06PM
+Randip singh	INDIA	PUNJAB	MO216523406	20	Feb 10 2016 2:03PM
+Khushwinder singh	INDIA	PUNJAB	MO216523405	20	Feb 10 2016 2:02PM
+Narinder singh	INDIA	PUNJAB	MO216523404	50	Feb 10 2016 1:58PM
+Ladi singh	INDIA	PUNJAB	MO216523403	200	Feb 10 2016 1:55PM
+Jasbir singh	INDIA	PUNJAB	MO216523402	300	Feb 10 2016 1:50PM
+Satnam singh	INDIA	PUNJAB	MO216523400	300	Feb 10 2016 1:48PM
+Harvinder singh	INDIA	PUNJAB	MO216523399	200	Feb 10 2016 1:37PM
+Aniket singh	INDIA	DELHI	MO216523398	5	Feb 10 2016 1:34PM
+Aniket Saxena	INDIA	DELHI	MO216523397	5	Feb 10 2016 1:33PM
+Sapinder singh	INDIA	PUNJAB	MO216523396	100	Feb 10 2016 1:32PM
+akash verma	INDIA	DELHI	MO216523395	10	Feb 10 2016 1:31PM
+akash verma	INDIA	DELHI	MO216523393	10	Feb 10 2016 1:28PM
+e . talukdar	INDIA	WEST BENGAL	MO216523392	20	Feb 10 2016 1:24PM
+Harpreet singh	INDIA	PUNJAB	MO216523391	100	Feb 10 2016 1:23PM
+Gurdhian singh	INDIA	PUNJAB	MO216523390	100	Feb 10 2016 1:21PM
+Vijay A Chavan	INDIA	GOA	MO216523386	100	Feb 10 2016 1:04PM
+lawrence Paul	INDIA	GOA	MO216523384	100	Feb 10 2016 1:00PM
+Nilotpal Debberma	INDIA	TRIPURA	MO216523383	200	Feb 10 2016 12:50PM
+Niladrishekhar Biswas	INDIA	MAHARASHTRA	NI523382	200	Feb 10 2016 12:41PM
+Sukhwinder singh	INDIA	PUNJAB	MO216523378	100	Feb 10 2016 12:22PM
 
