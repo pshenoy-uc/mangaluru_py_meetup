@@ -1,0 +1,1 @@
+Given a number ‘n’, Find  a number greater than ‘n’ which is a palindrome. (Ex. NextPalindrome(14552) = 14641)
