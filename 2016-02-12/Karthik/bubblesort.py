@@ -1,12 +1,14 @@
-from collections import *
-def bubblesort(d) :
-    if isinstance(d, list) :
-        for I in xrange(len(d)) :
-            for j in xrange(len(d)) :
-                if d[I] < d[j] :
-                    temp = d[I] 
-                    d[I] = d[j] 
-                    d[j] = temp
+from collections import OrderedDict
+
+
+def bubblesort(iterable) :
+    if isinstance(iterable, list) :
+        for I in xrange(len(iterable)) :
+            for j in xrange(len(iterable)) :
+                if iterable[I] < iterable[j] :
+                    temp = iterable[I] 
+                    iterable[I] = iterable[j] 
+                    iterable[j] = temp
         return d
     elif isinstance(d, dict) :
         keys = bubblesort(d.keys())
