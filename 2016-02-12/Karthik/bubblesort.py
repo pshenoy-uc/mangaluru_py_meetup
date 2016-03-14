@@ -6,6 +6,8 @@ Last Commit: Added reverse sorting option
 Description:
 This code manually sorts the items of a iterable by swapping items.
 The iterables can be a list or dict.
+
+Python Style-Guide: PEP8
 """
 from collections import OrderedDict
 
