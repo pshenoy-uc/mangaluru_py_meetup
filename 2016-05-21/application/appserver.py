@@ -16,6 +16,14 @@ def get_state_with_num_of_donations():
     result = aap.get_state_with_num_of_donations()
     return jsonify({'result': result})
 
+@application.route("/get_n_persons_with_top_donations", methods=['GET'])
+def get_n_persons_with_top_donations():
+
+    n = request.args.get('n', 5)
+
+    aap = AAPDonationStats()
+    result = aap.get_n_persons_with_top_donations(int(n))
+    return jsonify({'result': result})
 
 @application.errorhandler(404)
 def page_not_found(error):
