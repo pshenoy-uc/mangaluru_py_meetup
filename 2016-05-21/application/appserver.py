@@ -8,7 +8,7 @@ application = Flask(__name__)
 def sample():
     return jsonify({'test': 'sample'})
 
-@application.route("/test")
+@application.route("test")
 def test():
     return "Hello"
 
