@@ -8,7 +8,7 @@ application = Flask(__name__)
 def sample():
     return jsonify({'test': 'sample'})
 
-@application.route("test")
+@application.route("/test")
 def test():
     return "Hello"
 
@@ -17,4 +17,4 @@ def page_not_found(error):
     return jsonify({'ERROR': 404})
 
 if __name__ == "__main__":
-    application.run(host='0.0.0.0')
+    application.run(host='0.0.0.0', port=8082)
