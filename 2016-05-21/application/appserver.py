@@ -8,6 +8,10 @@ application = Flask(__name__)
 def sample():
     return jsonify({'test': 'sample'})
 
+@application.route("/test")
+def test():
+    return "Hello"
+
 @application.errorhandler(404)
 def page_not_found(error):
     return jsonify({'ERROR': 404})
