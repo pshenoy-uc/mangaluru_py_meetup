@@ -90,8 +90,12 @@ class AAPDonationStats(object):
             except KeyError:
                 fav_time_dict [time] = 1
 
-        sorted_person_name_list = sorted (fav_time_dict.items(), key= lambda x: x[1], reverse=True)
-        return sorted_person_name_list
+
+        favourite_time_of_donation_list = sorted (fav_time_dict.items(), key= lambda x: x[1], reverse=True)
+        favourite_time_of_donation_list = [(time, "%s" % (math.ceil(count*100/total_entries))) for (time, count) in favourite_time_of_donation_list]
+        
+        return favourite_time_of_donation_list
+
 
 if __name__ == "__main__":
     stats = AAPDonationStats()
