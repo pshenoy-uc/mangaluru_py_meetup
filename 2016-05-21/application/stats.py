@@ -1,7 +1,7 @@
 import os, sys, pdb, re
 
 class AAPDonationStats(object):
-    
+
     def __init__ (self):
         input_file_obj = open ('input_file_2.txt', 'r')
         input_file_buffer = input_file_obj.read ()
@@ -95,12 +95,12 @@ class AAPDonationStats(object):
 
 if __name__ == "__main__":
     stats = AAPDonationStats()
-    
+
     print "get_state_with_num_of_donations\n %s\n\n" % (str(stats.get_state_with_num_of_donations ()))
     print "get_n_persons_with_top_donations\n %s\n\n" % (str(stats.get_n_persons_with_top_donations (5)))
     print "get_persons_with_repeated_donations\n %s" % stats.get_persons_with_repeated_donations ()
     print "get_favourite_time_of_donations\n %s" % stats.get_favourite_time_of_donations ()
-    
+
     '''
     print " %s" % stats.
     print " %s" % stats.
