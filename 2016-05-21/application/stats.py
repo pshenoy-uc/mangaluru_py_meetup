@@ -1,4 +1,5 @@
 import os, sys, pdb, re
+import math
 
 class AAPDonationStats(object):
 
@@ -73,7 +74,7 @@ class AAPDonationStats(object):
     def get_favourite_time_of_donations (self):
         fav_time_dict={}
         time_hr_regex = re.compile (r'.*\s([0-9]*)\:[0-9]*([a-zA-Z]*)$', re.I)
-
+        total_entries  = 0
         for line in self.input_contents_by_line_list:
             field_value_list = line.split('\t')
 
@@ -87,8 +88,10 @@ class AAPDonationStats(object):
 
             try:
                 fav_time_dict [time] = fav_time_dict [time] +1
+                total_entries += 1
             except KeyError:
                 fav_time_dict [time] = 1
+                total_entries += 1
 
 
         favourite_time_of_donation_list = sorted (fav_time_dict.items(), key= lambda x: x[1], reverse=True)
