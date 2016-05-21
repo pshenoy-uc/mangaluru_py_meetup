@@ -6,8 +6,13 @@ from stats import AAPDonationStats
 application = Flask(__name__)
 
 @application.route("/", methods=['GET'])
-def sample():
-    return "<h1> hello </h1>"
+def index():
+    return "URLS: <ol> " \
+           "<li> get_state_with_num_of_donations</li>" \
+           "<li> get_favourite_time_of_donations</li>" \
+           "<li> get_persons_with_repeated_donations</li>" \
+           "<li> get_n_persons_with_top_donations?n=10</li>" \
+           "</ol>"
 
 @application.route("/get_state_with_num_of_donations")
 def get_state_with_num_of_donations():
