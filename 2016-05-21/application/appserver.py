@@ -16,7 +16,7 @@ def get_state_with_num_of_donations():
     result = aap.get_state_with_num_of_donations()
     return jsonify({'result': result})
 
-@application.route("/get_n_persons_with_top_donations", methods=['GET'])
+@application.route("/get_n_persons_with_top_donations", methods=['POST'])
 def get_n_persons_with_top_donations():
 
     n = request.args.get('n', 5)
