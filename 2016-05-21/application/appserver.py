@@ -7,7 +7,7 @@ application = Flask(__name__)
 
 @application.route("/", methods=['GET'])
 def sample():
-    return jsonify({'test': 'sample'})
+    return "<h1> hello </h1>"
 
 @application.route("/get_state_with_num_of_donations")
 def get_state_with_num_of_donations():
