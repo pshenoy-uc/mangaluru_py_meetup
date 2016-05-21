@@ -16,7 +16,21 @@ def get_state_with_num_of_donations():
     result = aap.get_state_with_num_of_donations()
     return jsonify({'result': result})
 
-@application.route("/get_n_persons_with_top_donations", methods=['POST'])
+@application.route("/get_favourite_time_of_donations")
+def get_favourite_time_of_donations():
+
+    aap = AAPDonationStats()
+    result = aap.get_favourite_time_of_donations()
+    return jsonify({'result': result})
+
+@application.route("/get_persons_with_repeated_donations")
+def get_persons_with_repeated_donations():
+
+    aap = AAPDonationStats()
+    result = aap.get_persons_with_repeated_donations()
+    return jsonify({'result': result})
+
+@application.route("/get_n_persons_with_top_donations", methods=['GET'])
 def get_n_persons_with_top_donations():
 
     n = request.args.get('n', 5)
