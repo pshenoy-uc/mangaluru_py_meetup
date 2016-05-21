@@ -1,6 +1,7 @@
 from flask import Flask
 from flask import jsonify
 from flask import request
+from stats import AAPDonationStats
 
 application = Flask(__name__)
 
@@ -8,9 +9,13 @@ application = Flask(__name__)
 def sample():
     return jsonify({'test': 'sample'})
 
-@application.route("/test")
-def test():
-    return "Hello"
+@application.route("/get_state_with_num_of_donations")
+def get_state_with_num_of_donations():
+
+    aap = AAPDonationStats()
+    result = aap.get_state_with_num_of_donations()
+    return jsonify({'result': result})
+
 
 @application.errorhandler(404)
 def page_not_found(error):
