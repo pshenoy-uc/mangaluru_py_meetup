@@ -11,6 +11,10 @@ Python Style-Guide: PEP8
 def nextPalindrome(number):
     str_num = str(number)
     length = len(str_num)
+    if length <= 1 and number != 9:
+        return number+1
+    if number == 9:
+        return 11
     mid = length // 2
     if float(length) % 2 == 0:
         # if length of string is even do the following.
@@ -25,6 +29,8 @@ def nextPalindrome(number):
             # reverse = 124421
             palin = str(int(str_num[:mid]) + 1)
             reverse = palin + palin[::-1]
+            if len(reverse) > length:
+                reverse = reverse[:mid] + reverse[mid+1:]
             return reverse
         else:
             # If number is less than rev_num i.e
@@ -34,13 +40,18 @@ def nextPalindrome(number):
         # If number has odd length then add the middle element
         # in the middle of the string. Example: 12345
         # rev_num = "12" + "3" + "21"
-        rev_num = str_num[:mid] + str_num[mid] + str_num[mid-1::-1]
+        # import pdb; pdb.set_trace()
+        upto_mid = int(str_num[:mid]) % 10
+        rev_num = str(upto_mid) + str_num[mid] + str(upto_mid)[::-1]
         
         # The logic below is same as even length number
         if number >= int(rev_num):
             # Get 124; reverse = "124" + "21"
             palin = str(int(str_num[:mid+1]) + 1)
             reverse = palin + palin[-2::-1]
+            if len(reverse) > length:
+                # 999 scenario
+                reverse = reverse[:mid] + reverse[mid+1:]
             return reverse
         else:
             return rev_num
