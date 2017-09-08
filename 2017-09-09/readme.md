@@ -133,35 +133,35 @@ print(soup.find_all(name='a', recursive=False, limit=2))
 ### Moving Forward in HTML Tree
 
 Property | Corresponding Function
-- | -
+------------ | -------------
 `next` (Depricating) | `find_next` or `find_all_next` or `find` or `find_all`
 `next_element` or `next_elements` | `find_next_element` or `find_next_elements`
 
 ### Moving Backwards in HTML Tree
 
 Property | Corresponding Function
-- | -
+------------ | -------------
 `previous` (Depricating) | `find_previous` or `find_all_previous`
 `previous_element` or `previous_elements` | `find_previous_element` or `find_previous_elements`
 
 ### Moving side ways in the same node level in HTML
 
 Property | Corresponding Function
-- | -
+------------ | -------------
 `next_sibling` _or_ `next_siblings` | `find_next_sibling` _or_ `find_next_siblings`
 `previous_sibling` _or_ `previous_siblings` | `find_previous_sibling` _or_ `find_previous_siblings`
 
 ### Moving up in the HTML Tree
 
 Property | Corresponding Function
-- | -
+------------ | -------------
 `parent` _or_ `parents` | `find_parent` _or_ `find_parents`
 
 
 ### Moving down in the HTML Tree
 
 Property | Corresponding Function | Meaning
-- | - | -
+------------ | ------------ | -------------
 `children` or `contents` | `find_children` | _Direct Children_
 `decendants` | `find_decendants` | _Direct children and children of direct children recursively_
 `string` | `tag_object.find(string=True)` | If a tag has only one child and is of type NavigableString, this works
