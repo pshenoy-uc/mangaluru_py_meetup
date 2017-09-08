@@ -168,3 +168,7 @@ Property | Corresponding Function | Meaning
 `strings` | `tag_object.find_all(string=True)`
 `stripped_strings` | `tag_object.get_text(strip=True)` | returns generator with trimmed strings
 
+## Exercise - 2
+
+* Try out scraping https://en.wikipedia.org/wiki/Main_Page and search for all links having Donald Trump
+* Try to crawl to the Donald Trump's wiki from the Main Page and and get the information from personal details and store it in a JSON file.
