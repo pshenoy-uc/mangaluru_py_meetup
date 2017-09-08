@@ -2,11 +2,11 @@
 
 ## Pre-requisites
 
-* [Python3](!https://www.python.org/downloads/)
-* [pip3](!https://bootstrap.pypa.io/get-pip.py)
-* [bs4](!https://www.crummy.com/software/BeautifulSoup/bs4/download/4.6/beautifulsoup4-4.6.0.tar.gz) (Also known as Beautiful Soup)
-* [requests](!https://pypi.python.org/packages/b0/e1/eab4fc3752e3d240468a8c0b284607899d2fbfb236a56b7377a329aa8d09/requests-2.18.4.tar.gz#md5=081412b2ef79bdc48229891af13f4d82)
-* [virtualenv](!https://pypi.python.org/packages/d4/0c/9840c08189e030873387a73b90ada981885010dd9aea134d6de30cd24cb8/virtualenv-15.1.0.tar.gz#md5=44e19f4134906fe2d75124427dc9b716)
+* [Python3](https://www.python.org/downloads/)
+* [pip3](https://bootstrap.pypa.io/get-pip.py)
+* [bs4](https://www.crummy.com/software/BeautifulSoup/bs4/download/4.6/beautifulsoup4-4.6.0.tar.gz) (Also known as Beautiful Soup)
+* [requests](https://pypi.python.org/packages/b0/e1/eab4fc3752e3d240468a8c0b284607899d2fbfb236a56b7377a329aa8d09/requests-2.18.4.tar.gz#md5=081412b2ef79bdc48229891af13f4d82)
+* [virtualenv](https://pypi.python.org/packages/d4/0c/9840c08189e030873387a73b90ada981885010dd9aea134d6de30cd24cb8/virtualenv-15.1.0.tar.gz#md5=44e19f4134906fe2d75124427dc9b716)
 
 ## Installation Instructions
 
