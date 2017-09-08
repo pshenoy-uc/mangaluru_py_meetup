@@ -166,5 +166,5 @@ Property | Corresponding Function | Meaning
 `decendants` | `find_decendants` | _Direct children and children of direct children recursively_
 `string` | `tag_object.find(string=True)` | If a tag has only one child and is of type NavigableString, this works
 `strings` | `tag_object.find_all(string=True)`
-`stripped_strings` | - | returns generator with trimmed strings
+`stripped_strings` | `tag_object.get_text(strip=True)` | returns generator with trimmed strings
 
